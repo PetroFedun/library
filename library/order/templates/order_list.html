@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}All Orders{% endblock %}
+{% block content %}
+
+    <h1>Orders List</h1>
+    {% if login_message %}
+        <p>{{ login_message }} {% if login_link %}<a href="{{ login_link }}">Login</a></p>{% endif %}
+    {% else %}
+        <div>
+            <label for="filter_checkbox"><strong>Show Open Orders:</strong></label>
+            <input type="checkbox" id="filter_checkbox" onchange="toggleFilter()">
+        </div>
+
+        <p></p>
+
+        {% if orders %}
+            <table border="1" id="orders_table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Book</th>
+                        <th>Created At</th>
+                        <th>End At</th>
+                        <th>Planned End At</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
+                            <td>{{ order.book.name }}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td>
+                                {% if order.end_at %}{{ order.end_at|default:"" }}
+                                {% elif not order.end_at and user.role == 1 %}
+                                    <form method="post" action="{% url 'close_order' order.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button class="negative-button" type="submit">Close Order</button>
+                                    </form>
+
+
+                                {% endif %}
+                            </td>
+                            <td>{{ order.plated_end_at }}</td>
+                            <td>
+                                {% if order.end_at %} <p style="color: red;"><strong>Order is Closed</strong></p>
+                                {% elif order.days_left > 3 %}<p style="color: green;">{{ order.days_left }} days left</p>
+                                {% else %} <p style="color: red;">{{ order.days_left }} days left</p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: grey;">The order list is empty.</p>
+        {% endif %}
+        <p></p>
+        <a href="{% url 'create_order' %}">Create New Order</a>
+    {% endif %}
+
+    <script>
+    function toggleFilter() {
+        var table = document.getElementById("orders_table");
+        var showOnlyOpenOrders = document.getElementById("filter_checkbox").checked;
+
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            var endAtCell = row.cells[4];  // Assuming End At is the 5th cell in the row
+            var isEndAtEmpty = endAtCell.innerText.trim() === "" || endAtCell.innerText.trim() === "Close Order";
+
+            if (showOnlyOpenOrders && !isEndAtEmpty) {
+                row.style.display = "none";
+            } else {
+                row.style.display = "";
+            }
+        }
+    }
+</script>
+
+
+
+
+{% endblock content %}

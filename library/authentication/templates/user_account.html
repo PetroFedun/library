@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Account{% endblock %}
+{% block content %}
+<h1>Account</h1>
+
+<table class="table-text" border="1">
+    <tr>
+        <td><b>First name</b></td>
+        <td>{{ user_data.first_name }}</td>
+    </tr>
+    {% if user_data.middle_name|length > 0 %}
+        <tr>
+            <td><b>Middle name</b></td>
+            <td>{{ user_data.middle_name }}</td>
+        </tr>
+    {% endif %}
+    <tr>
+        <td><b>Last name</b></td>
+        <td>{{ user_data.last_name }}</td>
+    </tr>
+    <tr>
+        <td><b>Email</b></td>
+        <td>{{ user_data.email }}</td>
+    </tr>
+    <tr>
+        <td><b>Role</b></td>
+        <td>{{ user_role }}</td>
+    </tr>
+</table><br>
+
+{% if user_role == 'librarian' %}
+    <a style="text-decoration: none; color: black" class="confirm-button"
+       href="{% url 'all_users' %}">Show info about all users</a><br><br>
+{% endif %}
+
+
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <a href="{% url 'logout' %}" style="margin-right: auto;">
+        <button type="button" class="negative-button">Log Out</button>
+    </a>
+</div>
+
+{% endblock content %}

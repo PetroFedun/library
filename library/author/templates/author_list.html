@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Author{% endblock %}
+{% block content %}
+
+    <h1>Author List</h1>
+    {% if login_message %}
+        <p>{{ login_message }} {% if login_link %}<a href="{{ login_link }}">Login</a></p>{% endif %}
+    {% else %}
+        {% if authors %}
+            <ul>
+                <table class="table-text" border="1">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Authors Full Name</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for author in authors %}
+                            <tr>
+                                <td>{{ author.id }}</td>
+                                <td>{{ author.name }}  {{ author.surname }} {{ author.patronymic }}</td>
+
+                                <td>
+                                    <form method="post" action="{% url 'delete_author' author.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <a href="{% url 'update_author' author.id %}">Edit</a>
+                                        {% if not author.is_attached_to_books %}
+                                            <button class="negative-button" type="submit"
+                                                    onclick="delete_author({{ author.id }})">Delete
+                                            </button>
+                                        {% endif %}
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </ul>
+        {% else %}
+            <p style="color: grey;">The author list is empty.</p>
+        {% endif %}
+        <a href="{% url 'create_author' %}">Create New Author</a>
+    {% endif %}
+{% endblock content %}

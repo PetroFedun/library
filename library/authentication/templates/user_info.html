@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}User Info{% endblock %}
+{% block content %}
+<h1>Specific User Info</h1>
+
+{% if login_message %}
+<p>{{ login_message }} {% if login_link %}<a href="{{ login_link }}">Login</a></p>{% endif %}
+{% else %}
+<table class="table-text" border="1">
+    <tr>
+        <td><b>ID</b></td>
+        <td>{{ user_data.id }}</td>
+    </tr>
+    <tr>
+        <td><b>First name</b></td>
+        <td>{{ user_data.first_name }}</td>
+    </tr>
+    {% if user_data.middle_name %}
+    <tr>
+        <td><b>Middle name</b></td>
+        <td>{{ user_data.middle_name }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td><b>Last name</b></td>
+        <td>{{ user_data.last_name }}</td>
+    </tr>
+    <tr>
+        <td><b>Email</b></td>
+        <td>{{ user_data.email }}</td>
+    </tr>
+    <tr>
+        <td><b>Orders</b></td>
+        <td>
+            {% for order in orders %}
+            Id: {{ order.id }} <br>
+            Name: {{order.book.name}} <br>
+            Created At: {{ order.created_at }} <br>
+            Plated End At: {{ order.plated_end_at }} <br>
+            {% if order.end_at %} <p style="color: red;"><strong>Order is Closed</strong></p><br>
+            {% else %} {{ order.days_left }} days left
+            {% endif %}
+            <br>
+            {% endfor %}
+        </td>
+    </tr>
+</table><br>
+{% endif %}
+
+{% endblock content %}

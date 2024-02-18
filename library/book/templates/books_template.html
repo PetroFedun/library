@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Books{% endblock %}
+{% block content %}
+<h1>Books</h1>
+
+<form method="get" action="{% url 'all_books' %}" style="display: flex; margin-bottom: 10px;">
+    <div class="sort-form">
+        <label style="font-size: 17px" for="sort_type">Sort by:</label>
+        <select class="sort-form-inner" name="sort_type" onchange="this.form.submit()">
+            <option value="{{ prev_sort_type }}" hidden selected>{{ prev_sort_type }}</option>
+            <option value="Name (A-Z)"> Name (A-Z)</option>
+            <option value="Name (Z-A)"> Name (Z-A)</option>
+            <option value="Count ASC">Count ASC</option>
+            <option value="Count DESC"> Count DESC</option>
+            <option value="Authors ASC">Authors ASC</option>
+            <option value="Authors DESC"> Authors DESC</option>
+        </select><br>
+    </div>
+
+    {% if user_role == 'librarian' %}
+    <div class="sort-form">
+        <label style="font-size: 17px" for="user_id">Select user id:</label>
+        <select class="sort-form-inner" name="user_id" onchange="this.form.submit()">
+            <option value="{{ prev_selected_user }}" hidden selected>{{ prev_selected_user }}</option>
+            <option value="Show all">Show all</option>
+            {% for user in all_visitors %}
+            <option value="{{ user.id }}">{{ user.id }}</option>
+            {% endfor %}
+        </select><br>
+    </div>
+    {% endif %}
+</form>
+
+{% if books_list %}
+<table class="table-text" border="1">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Count</th>
+        <th>Authors</th>
+        {% if user_role == 'librarian' %}
+        <th></th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in books_list %}
+    <tr>
+        <td><a href="{% url 'book_info' book.id %}">{{ book.name }}</a></td>
+        <td>{{ book.count }}</td>
+        <td>
+            {% for author in book.authors.all %}
+            {{forloop.counter}}. {{ author.name }} {{ author.surname }} {{ author.patronymic }}<br>
+            {% endfor %}
+        </td>
+        {% if user_role == 'librarian' %}
+        <td>
+            <a href="{% url 'book_update' book.id %}">Edit</a>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No books found</p>
+{% endif %}
+{% if user_role == 'librarian' %}
+<p><a href="{% url 'book_creation' %}">Create a book</a></p>
+{% endif %}
+
+{% endblock content %}

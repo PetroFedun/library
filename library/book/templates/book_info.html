@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Books{% endblock %}
+{% block content %}
+<h1>{{ book_data.name }}</h1>
+
+<table class="table-text" border="1">
+    <tr>
+        <td><b>Description</b></td>
+        <td>{{ book_data.description }}</td>
+    </tr>
+    <tr>
+        <td><b>Count</b></td>
+        <td>{{ book_data.count }}</td>
+    </tr>
+    <tr>
+        <td><b>Authors</b></td>
+        <td>
+            {% for author in book_data.authors.all %}
+            {{forloop.counter}}. {{ author.name }} {{ author.surname }} {{ author.patronymic }}<br>
+            {% endfor %}
+        </td>
+    </tr>
+</table><br>
+
+{% endblock content %}

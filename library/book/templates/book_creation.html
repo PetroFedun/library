@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Book Creation{% endblock %}
+{% block content %}
+<h1>Book Creation</h1>
+<form method="post" action="{% url 'book_creation' %}">
+    {% csrf_token %}
+
+    <div class="form-row">
+        <div class="form-group-label">
+            <label for="name">Name:</label>
+        </div>
+        <div class="form-group-input">
+            <input type="text" name="name" required><br>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group-label">
+            <label for="description">Description:</label><br>
+        </div>
+        <div class="form-group-input">
+                <textarea id="description" name="description" rows="4" cols="50"
+                          placeholder="Input your description here..." maxlength="255"></textarea><br>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group-label">
+            <label for="count">Count:</label>
+        </div>
+        <div class="form-group-input">
+            <input type="number" name="count" value="10" min="1"><br>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group-label">
+            <label for="authors">Authors:</label><br>
+        </div>
+        <div class="form-group-input">
+            <select name="authors" multiple>
+                {% for author in authors_list %}
+                <option value="{{ author }}">{{ author }}</option>
+                {% endfor %}
+            </select><br>
+        </div>
+    </div>
+
+    <p></p>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <a href="{% url 'all_books' %}" style="margin-right: auto;">
+            <button type="button" class="negative-button">Cancel</button>
+        </a>
+        <button class="confirm-button" type="submit">Create</button>
+    </div>
+</form>
+<br>
+
+{% if success %}
+{{ success }}
+{% endif %}
+
+{% if error %}
+{{ error }}
+{% endif %}
+
+{% endblock content %}

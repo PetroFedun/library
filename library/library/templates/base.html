@@ -1,0 +1,23 @@
+{% load static %}
+
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Home{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <div class="menu-bar">
+            <ul class="menu-bar-inner">
+                <li><a class="menu-bar-item" href="{% url 'all_books' %}">Books</a></li>
+                <li><a class="menu-bar-item" href="{% url 'user_redirect' %}">User</a></li>
+                <li><a class="menu-bar-item" href="{% url 'author_list' %}">Authors</a></li>
+                <li><a class="menu-bar-item" href="{% url 'order_list' %}">Orders</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            {% block content %} {% endblock content %}
+        </div>
+    </body>
+</html>

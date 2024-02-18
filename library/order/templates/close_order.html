@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Confirm Author Deletion{% endblock %}
+{% block content %}
+
+    <h1>Confirm Order Close</h1>
+<p>Are you sure you want to close order for this book: <strong>{{ book }}</strong> and this visitor: <strong>{{ visitor }}</strong> ?</p>
+    <p></p>
+    <form method="post" action="{% url 'close_order' order.id %}">
+        {% csrf_token %}
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="{% url 'order_list' %}" style="margin-right: auto;">
+                <button type="button" class="negative-button">Cancel</button>
+            </a>
+            <button class="confirm-button" type="submit" name="confirm" value="yes">Confirm</button>
+        </div>
+    </form>
+
+{% endblock content %}

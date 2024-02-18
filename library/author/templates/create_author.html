@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Author{% endblock %}
+{% block content %}
+    <h1>Create Author</h1>
+    <form method="post" action="{% url 'create_author' %}">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="form-group-label">
+                <label for="name">Name:</label>
+            </div>
+            <div class="form-group-input">
+                <input type="text" name="name" required><br>
+            </div>
+        </div>
+
+
+        <div class="form-row">
+            <div class="form-group-label">
+                <label for="surname">Surname:</label>
+            </div>
+            <div class="form-group-input">
+                <input type="text" name="surname" required><br>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group-label">
+                <label for="patronymic">Patronymic:</label>
+            </div>
+            <div class="form-group-input">
+                <input type="text" name="patronymic" required><br>
+            </div>
+        </div>
+
+        <p></p>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="{% url 'author_list' %}" style="margin-right: auto;">
+                <button type="button" class="negative-button">Cancel</button>
+            </a>
+            <button class="confirm-button" type="submit">Create Author</button>
+        </div>
+
+    </form>
+{% endblock content %}
+
